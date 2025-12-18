@@ -31,11 +31,7 @@ class FlutterNfcReaderPlugin : FlutterPlugin, ActivityAware, MethodCallHandler, 
     private var methodChannel: MethodChannel? = null
     private var eventChannel: EventChannel? = null
     private var nfcFlags = NfcAdapter.FLAG_READER_NFC_A or
-            NfcAdapter.FLAG_READER_NFC_B or
-            NfcAdapter.FLAG_READER_NFC_BARCODE or
-            NfcAdapter.FLAG_READER_NFC_F or
-            NfcAdapter.FLAG_READER_NFC_V
-
+            NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         require(activity != null) { "Plugin not ready yet" }
@@ -55,11 +51,9 @@ class FlutterNfcReaderPlugin : FlutterPlugin, ActivityAware, MethodCallHandler, 
                 listeners.removeAll { it !is NfcScanner }
                 result.success(null)
             }
-
             "NfcRead" -> {
                 listeners.add(NfcReader(result, call))
             }
-
             "NfcWrite" -> {
                 listeners.add(NfcWriter(result, call))
             }
@@ -87,7 +81,6 @@ class FlutterNfcReaderPlugin : FlutterPlugin, ActivityAware, MethodCallHandler, 
         listeners.add(NfcScanner(this@FlutterNfcReaderPlugin))
         enableReaderMode(activity, this@FlutterNfcReaderPlugin, nfcFlags, null)
     }
-
 
     private fun NfcAdapter.stopNFCReader() {
         disableReaderMode(activity)
@@ -123,7 +116,6 @@ class FlutterNfcReaderPlugin : FlutterPlugin, ActivityAware, MethodCallHandler, 
                 arrayOf(Manifest.permission.NFC),
                 PERMISSION_NFC
         )
-
         nfcAdapter?.startNFCReader()
     }
 

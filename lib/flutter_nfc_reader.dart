@@ -54,8 +54,10 @@ class NfcData {
 }
 
 class FlutterNfcReader {
-  static const MethodChannel _channel = const MethodChannel('flutter_nfc_reader');
-  static const stream = const EventChannel('it.matteocrippa.flutternfcreader.flutter_nfc_reader');
+  static const MethodChannel _channel =
+      const MethodChannel('flutter_nfc_reader');
+  static const stream =
+      const EventChannel('it.matteocrippa.flutternfcreader.flutter_nfc_reader');
 
   static Future<NfcData> enableReaderMode() async {
     final Map data = await _channel.invokeMethod('NfcEnableReaderMode');
@@ -88,12 +90,14 @@ class FlutterNfcReader {
     });
   }
 
-  static Future<Map> _callRead({instruction = String}) async {
-    return await _channel.invokeMethod('NfcRead', <String, dynamic>{"instruction": instruction});
+  static Future<Map> _callRead({instruction: String}) async {
+    return await _channel
+        .invokeMethod('NfcRead', <String, dynamic>{"instruction": instruction});
   }
 
-  static Future<NfcData> write(String path, String label) async {
-    final Map data = await _channel.invokeMethod('NfcWrite', <String, dynamic>{'label': label, 'path': path});
+  static Future<NfcData> write(String path, String label, {bool isWritingURI = false}) async {
+    final Map data = await _channel.invokeMethod(
+        'NfcWrite', <String, dynamic>{'label': label, 'path': path, 'isWritingURI': isWritingURI});
 
     final NfcData result = NfcData.fromMap(data);
 
@@ -101,8 +105,10 @@ class FlutterNfcReader {
   }
 
   static Future<NFCAvailability> checkNFCAvailability() async {
-    var availability = "NFCAvailability.${await _channel.invokeMethod<String>("NfcAvailable")}";
-    return NFCAvailability.values.firstWhere((item) => item.toString() == availability);
+    var availability =
+        "NFCAvailability.${await _channel.invokeMethod<String>("NfcAvailable")}";
+    return NFCAvailability.values
+        .firstWhere((item) => item.toString() == availability);
   }
 }
 
