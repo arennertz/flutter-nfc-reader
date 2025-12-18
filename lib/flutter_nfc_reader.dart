@@ -90,7 +90,7 @@ class FlutterNfcReader {
     });
   }
 
-  static Future<Map> _callRead({instruction: String}) async {
+  static Future<Map> _callRead({instruction = String}) async {
     return await _channel
         .invokeMethod('NfcRead', <String, dynamic>{"instruction": instruction});
   }
